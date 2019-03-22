@@ -24,7 +24,7 @@ class IntroTest {
     
     
     @Test
-    fun `test findEarthReplacements`() {
+    fun `run findEarthReplacements`() {
         
         val planets = listOf(
             Planet("Satum", 10, 0.03, 0.01, 300.0, 300),

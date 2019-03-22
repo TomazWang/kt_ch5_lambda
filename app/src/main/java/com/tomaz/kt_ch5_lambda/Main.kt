@@ -1,4 +1,4 @@
-@file:Suppress("unused", "ConvertCallChainIntoSequence")
+@file:Suppress("unused", "ConvertCallChainIntoSequence", "MoveLambdaOutsideParentheses", "RedundantLambdaArrow")
 
 package com.tomaz.kt_ch5_lambda
 
@@ -62,7 +62,6 @@ import com.tomaz.kt_ch5_lambda.intro.model.Planet
  *
  * 假設我們今天要移民宇宙、有一個 function 可以快速找到適合的星球
  */
-
 fun findEarthReplacements(planets: List<Planet?>): List<Pair<String, Planet>> =
     planets
         .filterNotNull()
@@ -97,6 +96,8 @@ fun findEarthReplacements(planets: List<Planet?>): List<Pair<String, Planet>> =
 //                                                                                   \$$    $$
 //                                                                                    \$$$$$$
 
+// 📕 5.1.3
+
 
 // 基本的 function 宣告法
 fun simpleFunction(arg: String) {
@@ -118,19 +119,35 @@ fun funcWithReturnValue2(x: Int) = x + 1
 val addOne = { x: Int -> x + 1 }
 
 
-// function, lambda 可以被儲存、傳遞
-fun isEven(n: Int) = n % 2 == 0
-
-val isEvenLambda = { n: Int -> n % 2 == 0 }
-
-fun verifyNumber(x: Int, verifyMethod: (Int) -> Boolean): Boolean {
-//    return verifyMethod.invoke(x)
-    return verifyMethod(x)
+val sumOfEven = { ints: IntArray? ->
+    
+    if (ints == null) {
+        0   // lambda 中不能使用 return, 因為 Kotlin 中 return 是 return 最近一個 "fun" 定義
+    } else {
+        var sum = 0
+        for (i in ints) {
+            if (i % 2 == 0) {
+                sum += i
+            }
+        }
+        sum
+    }
 }
 
+//❓那如果真的很想加 return 怎麼辦 => 🏁 BasicCounterTest#`return from lambda`
 
 
-// 這種參數是 function 的 function ---> Higher order function
+// ⛄ 冷知識時間
+//
+// IntArray 轉成 java 會變成 int[]
+// Array<Int> 轉成 java 會變成 Integer[]
+
+
+// lambda 可以吃到外部的變數
+var counter = 0
+val inc = { counter++ }
+
+// 🚀️ BasicCounterTest#`lambda can access outer variable`
 
 
 //
@@ -165,6 +182,119 @@ fun verifyNumber(x: Int, verifyMethod: (Int) -> Boolean): Boolean {
 //
 //
 
+
+// 首先 lambda 是可以被儲存、傳遞的
+
+fun verify(x: String, verifyMethod: (String) -> Boolean) = verifyMethod.invoke(x)
+
+// TODO: 簡化 verify
+
+fun runVerifyWithLambda() {
+    
+    val allLowerCase = { s: String -> s.toLowerCase() == s }
+    val allUpperCase = { s: String -> s.toUpperCase() == s }
+    
+    // lambda 可以被當成參數塞進其他 function 內
+    verify("abcde", allLowerCase)
+    verify("ABCDE", allUpperCase)
+}
+
+
+// 因為 lambda 本質就是 function ， 所以我們用 function 做一次
+
+fun runVerifyWithFun() {
+    
+    // TODO: 改成 function 版
+    
+    val allLowerCase = { s: String -> s.toLowerCase() == s }
+    val allUpperCase = { s: String -> s.toUpperCase() == s }
+    
+    verify("abcde", allLowerCase)
+    verify("ABCDE", allUpperCase)
+}
+
+
+//
+//
+// 接下來一步一步的簡化 kotlin 中的 function
+//
+//
+
+
+fun simplifyLambdas() {
+    
+    
+    // 基本的 function 宣告
+    fun allLowerCaseFun(s: String): Boolean {
+        return s.toLowerCase() == s
+    }
+    
+    // 簡化 return
+    fun allLowerCaseFun2(s: String): Boolean = (s.toLowerCase() == s)
+    
+    
+    // 自動偵測回傳 type
+    fun allLowerCaseFun3(s: String) = s.toLowerCase() == s
+    
+    // 轉 lambda
+    val allLowerCaseFun4 = { s: String -> s.toLowerCase() == s }
+    
+    
+    // 用在 higher order function 中
+    verify("abcde", allLowerCaseFun4)
+    
+    
+    // 匿名 lambda
+    verify("abcde", { s: String -> s.toLowerCase() == s })
+    
+    
+    // 自動判別 type
+    verify("abcde", { s -> s.toLowerCase() == s })
+    
+    
+    // 取名叫做 it
+    verify("abcde", { it -> it.toLowerCase() == it })
+    
+    
+    // it 是一個特殊的變數名稱，在 lambda 中代表著預設參數（只有一個參數的時候）。可以省略
+    verify("abcde", { it.toLowerCase() == it })
+    
+    
+    // higher order function 的最後一個參數是 lambda 時，可以拉到括號外
+    verify("abcde") { it.toLowerCase() == it }
+}
+
+
+
+//
+//
+// ============================================================================================================
+//
+//
+
+
+
+//   __                               __              __                                      __
+//  |  \                             |  \            |  \                                    /  \
+//  | $$       ______   ______ ____  | $$____    ____| $$  ______         __   __   __      /  $$
+//  | $$      |      \ |      \    \ | $$    \  /      $$ |      \       |  \ |  \ |  \    /  $$
+//  | $$       \$$$$$$\| $$$$$$\$$$$\| $$$$$$$\|  $$$$$$$  \$$$$$$\      | $$ | $$ | $$   /  $$
+//  | $$      /      $$| $$ | $$ | $$| $$  | $$| $$  | $$ /      $$      | $$ | $$ | $$  /  $$
+//  | $$_____|  $$$$$$$| $$ | $$ | $$| $$__/ $$| $$__| $$|  $$$$$$$      | $$_/ $$_/ $$ /  $$
+//  | $$     \\$$    $$| $$ | $$ | $$| $$    $$ \$$    $$ \$$    $$       \$$   $$   $$|  $$
+//   \$$$$$$$$ \$$$$$$$ \$$  \$$  \$$ \$$$$$$$   \$$$$$$$  \$$$$$$$        \$$$$$\$$$$  \$$
+//
+//
+//
+//                                       _______                                 __
+//                                      |       \                               |  \
+//                                      | $$$$$$$\  ______    _______   ______   \$$ __     __   ______    ______
+//                                      | $$__| $$ /      \  /       \ /      \ |  \|  \   /  \ /      \  /      \
+//                                      | $$    $$|  $$$$$$\|  $$$$$$$|  $$$$$$\| $$ \$$\ /  $$|  $$$$$$\|  $$$$$$\
+//                                      | $$$$$$$\| $$    $$| $$      | $$    $$| $$  \$$\  $$ | $$    $$| $$   \$$
+//                                      | $$  | $$| $$$$$$$$| $$_____ | $$$$$$$$| $$   \$$ $$  | $$$$$$$$| $$
+//                                      | $$  | $$ \$$     \ \$$     \ \$$     \| $$    \$$$    \$$     \| $$
+//                                       \$$   \$$  \$$$$$$$  \$$$$$$$  \$$$$$$$ \$$     \$      \$$$$$$$ \$$
 
 
 
