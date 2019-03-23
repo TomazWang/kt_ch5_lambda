@@ -15,32 +15,50 @@ import org.spekframework.spek2.style.gherkin.Feature
  **/
 
 
-/**
- * 老闆要請員工，因為公司很缺人所以每一個人都請。但是有兩個原則
- *
- * 1. 看到"富二代"就不開心，略過富二代
- * 2. 無論請幾個，都要額外安插一個"老闆兒子"
- *
- * 請試著保持用 forEach
- */
-fun hireWorkers(names: List<String>): MutableList<String> {
-    
-    val allWorkers = mutableListOf<String>()
-    
-    names.forEach l@{
-        allWorkers.add(it)
-        
-        if (it == "富二代") {
-            TODO()
-        }
-    }
-    
-    allWorkers.add("老闆兒子")
-    
-    return allWorkers
-}
 
 object LambdaWithCollections : Spek({
+    
+    /**
+     * 老闆要請員工，因為公司很缺人所以每一個人都請。但是有兩個原則
+     *
+     * 1. 看到"富二代"就不開心，略過富二代
+     * 2. 無論請幾個，都要額外安插一個"老闆兒子"
+     *
+     * 請試著保持用 forEach
+     */
+    fun hireWorkers(names: List<String>): MutableList<String> {
+        
+        val allWorkers = mutableListOf<String>()
+        
+        /*
+        
+        for( it in names ){
+            if (it == "富二代") {
+                continue
+            }
+            allWorkers.add(it)
+        }
+        
+        */
+        
+        names.forEach {
+            
+            allWorkers.add(it)
+            
+            if (it == "富二代") {
+                // continue?
+                // return?
+                TODO()
+            }
+            
+        }
+        
+        allWorkers.add("老闆兒子")
+        
+        return allWorkers
+    }
+    
+    
     
     Feature("招募") {
         
@@ -48,10 +66,9 @@ object LambdaWithCollections : Spek({
             
             lateinit var candidates: List<String>
             lateinit var results: List<String>
-            val SON = "老闆兒子"
             
             
-            Given("沒有富二代") {
+            Given("沒有富二代在內的應徵者") {
                 candidates = listOf("Albert", "Ben", "Charlie", "Daniel", "Edward")
             }
             
@@ -63,9 +80,8 @@ object LambdaWithCollections : Spek({
                 results.size shouldEqualTo 6
             }
             
-            
             Then("最後一個是安插的老闆兒子") {
-                results.last() shouldBe SON
+                results.last() shouldBe "老闆兒子"
             }
             
         }
@@ -75,10 +91,9 @@ object LambdaWithCollections : Spek({
             
             lateinit var candidates: List<String>
             lateinit var results: List<String>
-            val SON = "老闆兒子"
             
             
-            Given("有富二代") {
+            Given("有富二代在內的應徵者") {
                 candidates = listOf("Albert", "Ben", "富二代", "Daniel", "Edward")
             }
             
@@ -92,7 +107,7 @@ object LambdaWithCollections : Spek({
             
             
             Then("最後一個是安插的老闆兒子") {
-                results.last() shouldBe SON
+                results.last() shouldBe "老闆兒子"
             }
             
             Then("富二代不應該被錄取") {
@@ -103,3 +118,6 @@ object LambdaWithCollections : Spek({
     }
     
 })
+
+
+// 📄 after completed the test, back to Main.kt

@@ -3,6 +3,7 @@
 package com.tomaz.kt_ch5_lambda
 
 import com.tomaz.kt_ch5_lambda.intro.model.Planet
+import com.tomaz.kt_ch5_lambda.receiver.Monkey
 
 /**
  * Created by TomazWang on 2019/03/22.
@@ -52,7 +53,7 @@ import com.tomaz.kt_ch5_lambda.intro.model.Planet
 //
 // 💡 使用教學
 //
-// - 看到 📄 -> 搜尋並切換到該檔案
+// - 看到 📄 -> 搜尋並切換到該檔案 ( 🔐, 🔑 一對互相連結 )
 // - 看到 🚀 -> 前往該檔案，並執行 main function
 // - 看到 🏁 -> 切換並試著完成這個測試
 
@@ -94,27 +95,35 @@ fun findEarthReplacements(planets: List<Planet?>): List<Pair<String, Planet>> =
 
 // 📕 5.1.3
 
-
+//
+//
 // 基本的 function 宣告法
 fun simpleFunction(arg: String) {
     print("Hello $arg")
 }
 
-
+//
+//
 // 會回傳資料的 function
 fun funcWithReturnValue(x: Int): Int {
     val y = x + 1
     return y
 }
 
+//
+//
 // 簡化簡單 return
 fun funcWithReturnValue2(x: Int) = x + 1
 
-
+//
+//
 // 簡化成 lambda
 val addOne = { x: Int -> x + 1 }
 
-
+//
+//
+//
+//
 val sumOfEven = { ints: IntArray? ->
     
     if (ints == null) {
@@ -130,9 +139,12 @@ val sumOfEven = { ints: IntArray? ->
     }
 }
 
+//
+//
 //❓那如果真的很想加 return 怎麼辦 => 🏁 BasicCounterTest#`return from lambda`
 
 
+//
 // ⛄ 冷知識時間
 //
 // IntArray 轉成 java 會變成 int[]
@@ -169,6 +181,11 @@ fun verify(x: String, block: (String) -> Boolean): Boolean {
 
 // TODO: 簡化 verify
 
+//
+//
+//
+//
+//
 fun runVerifyWithLambda() {
     
     val allLowerCase = { s: String -> s.toLowerCase() == s }
@@ -180,8 +197,14 @@ fun runVerifyWithLambda() {
 }
 
 
+//
+//
+//
 // 因為 lambda 本質就是 function ， 所以我們用 function 做一次
-
+//
+//
+//
+//
 fun runVerifyWithFun() {
     
     // TODO: 改成 function 版
@@ -209,38 +232,56 @@ fun simplifyLambdas() {
         return s.toLowerCase() == s
     }
     
+    //
     // 簡化 return
+    //
     fun allLowerCaseFun2(s: String): Boolean = (s.toLowerCase() == s)
     
     
+    //
     // 自動偵測回傳 type
+    //
     fun allLowerCaseFun3(s: String) = s.toLowerCase() == s
     
+    //
     // 轉 lambda
+    //
     val allLowerCaseFun4 = { s: String -> s.toLowerCase() == s }
     
     
+    //
     // 用在 higher order function 中
+    //
     verify("abcde", allLowerCaseFun4)
     
     
+    //
     // 匿名 lambda
+    //
     verify("abcde", { s: String -> s.toLowerCase() == s })
     
     
+    //
     // 自動判別 type
+    //
     verify("abcde", { s -> s.toLowerCase() == s })
     
     
+    //
     // 取名叫做 it
+    //
     verify("abcde", { it -> it.toLowerCase() == it })
     
     
+    //
     // it 是一個特殊的變數名稱，在 lambda 中代表著預設參數（只有一個參數的時候）。可以省略
+    //
     verify("abcde", { it.toLowerCase() == it })
     
     
+    //
     // higher order function 的最後一個參數是 lambda 時，可以拉到括號外
+    //
     verify("abcde") { it.toLowerCase() == it }
 }
 
@@ -258,6 +299,7 @@ fun simplifyLambdas() {
 //   | |__| (_| | | | | | | |_) | (_| | (_| |  \ V  V / /   | |__| (_) | | |  __/ (__| |_| | (_) | | | |
 //   |_____\__,_|_| |_| |_|_.__/ \__,_|\__,_|   \_/\_/_/     \____\___/|_|_|\___|\___|\__|_|\___/|_| |_|
 //
+// 📕 5.2
 
 
 // 💡
@@ -291,9 +333,11 @@ fun readNames() {
 }
 
 // ❓ forEach 和 for .. in 的差異
+//
 // 🏁 試著完成️ LambdaWithCollections#Feature("招募")
 
 
+//
 // map
 //
 // map 可以把一連串的資料一個一個用同樣的邏輯轉換成別的東西
@@ -309,7 +353,7 @@ public inline fun <T, R> Iterable<T>.map(transform: (T) -> R): List<R> {
 val numbers = (1..5)      // [1, 2, 3, 4, 5]
 val numberSquare = numbers.map { it * it } // [1, 4, 9, 16, 25]
 
-
+//
 // filter
 //
 // filter 可以把一個列表中符合某個邏輯的過濾出來
@@ -331,9 +375,11 @@ val oddNumbers = numbers.filter { it % 2 != 0 }
 //   \__ \  __/ (_| | |_| |  __/ | | | (_|  __/\__ \
 //   |___/\___|\__, |\__,_|\___|_| |_|\___\___||___/
 //                |_|
+//
+// 📕 5.3
 
 
-// 上面的那些 fuction 一次都會處理一整個 list
+// 上面的那些 function 一次都會處理一整個 list
 // 當 list 內容太多的時候，對記憶體是一個很大的負擔
 
 
@@ -343,6 +389,136 @@ val oddNumbers = numbers.filter { it % 2 != 0 }
 // 💡
 // - sequence 可以單個 item 處理，不會需要讓記憶體一次存放大量資料
 // - sequence 沒有 terminal operation 不會有結果
+
+
+//
+//
+//
+// terminal operator
+//
+// 📕 5.3.1
+//
+// - all & any
+// - count
+
+
+// all 檢查是否全部的 item 都符合
+// any 檢查其中是否有 item 都符合
+
+val thisValIsFalse = (1..5).all { it > 3 }
+val thisValIsTrue = (1..5).any { it > 3 }
+
+
+// count 計算列表的 item 數量
+val thisValIs6 = (1..20).filter { it < 7 }.count()
+val thisValIsAlso6 = (1..20).count { it < 7 }
+val thisValIsAlso6Too = (1..20).filter { it < 7 }.size
+
+// ⛄ 冷知識時間
+//
+// count 在記憶體中，只會計算數量（ item 內容會被 gc 掉）
+// size 會產生並儲存 list 內容
+//
+// --> 當只需要數量的時候，使用 count 是比較優化的作法
+
+// 🚀️ BasicCounterTest#`lambda can access outer variable`
+
+
+//
+//
+// ============================================================================================================
+//
+//
+
+
+//
+//
+//
+//
+//
+//    _  __     _   _ _         _                    _         _
+//   | |/ /___ | |_| (_)_ __   | |    __ _ _ __ ___ | |__   __| | __ _
+//   | ' // _ \| __| | | '_ \  | |   / _` | '_ ` _ \| '_ \ / _` |/ _` |
+//   | . \ (_) | |_| | | | | | | |__| (_| | | | | | | |_) | (_| | (_| |
+//   |_|\_\___/ \__|_|_|_| |_| |_____\__,_|_| |_| |_|_.__/ \__,_|\__,_|
+//   (_)_ __       | | __ ___   ____ _
+//   | | '_ \   _  | |/ _` \ \ / / _` |
+//   | | | | | | |_| | (_| |\ V / (_| |
+//   |_|_| |_|  \___/ \__,_| \_/ \__,_|
+//
+//
+// 📕 5.4
+
+// 📄 前往 KtLambda.kt (超級迷宮)
+//
+// 或是 🔗 https://developer.android.com/kotlin/interop#lambda_arguments
+
+
+
+//
+//
+//
+//
+//
+
+
+//
+//
+// ========================= 我 是 分 隔 線 =======================================================================
+//
+//
+
+
+
+//
+//
+//
+//
+//
+
+
+//    _                    _         _                   __
+//   | |    __ _ _ __ ___ | |__   __| | __ _  __      __/ /
+//   | |   / _` | '_ ` _ \| '_ \ / _` |/ _` | \ \ /\ / / /
+//   | |__| (_| | | | | | | |_) | (_| | (_| |  \ V  V / /
+//   |_____\__,_|_| |_| |_|_.__/ \__,_|\__,_|   \_/\_/_/
+//   |  _ \ ___  ___ ___(_)_   _____ _ __
+//   | |_) / _ \/ __/ _ \ \ \ / / _ \ '__|
+//   |  _ <  __/ (_|  __/ |\ V /  __/ |
+//   |_| \_\___|\___\___|_| \_/ \___|_|
+//
+
+
+
+// 📕 5.5
+
+
+fun demonstrateAMonkeyDay(){
+    
+    val mondayMonkey = Monkey("Monday")
+    val tuesdayMonkey = Monkey("Tuesday")
+    val wendsdayMonkey = Monkey("Wednesday")
+    
+    
+    mondayMonkey.wakeUp()
+    println("${mondayMonkey.name} wears new cloth")
+    mondayMonkey.sleep()
+    
+    
+    tuesdayMonkey.wakeUp()
+    println("${tuesdayMonkey.name} is hungry")
+    tuesdayMonkey.sleep()
+    
+    
+    wendsdayMonkey.wakeUp()
+    println("${wendsdayMonkey.name} go hiking")
+    wendsdayMonkey.sleep()
+    
+}
+
+
+
+
 
 
 
