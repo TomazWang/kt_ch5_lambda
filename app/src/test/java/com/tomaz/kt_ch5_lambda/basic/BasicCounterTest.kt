@@ -13,12 +13,13 @@ import org.junit.Test
 
 class BasicCounterTest {
     
+    
     @Test
     fun `return from lambda`(){
         val sumOfEven = { ints: Array<Int>? ->
         
             if (ints == null) {
-                0
+                0 // TODO: insert return to this statement
             } else {
                 var sum = 0
                 for (i in ints) {
@@ -26,7 +27,7 @@ class BasicCounterTest {
                         sum += i
                     }
                 }
-                sum
+                sum // TODO: insert return to this statement
             }
         }
     }
