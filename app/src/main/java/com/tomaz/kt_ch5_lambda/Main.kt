@@ -552,5 +552,46 @@ val thisValIsAlso6Too = (1..20).filter { it < 7 }.size
 
 
 
+//
+// Kotlin 中有許多內建的 function, 有效的利用 lambda 來簡化常用的 code block
+//
 
 
+// let
+inline fun <T, R> T.let(block: (T) -> R): R {
+    return block(this)
+}
+
+
+// with
+inline fun <T, R> with(receiver: T, block: T.() -> R): R {
+    return receiver.block()
+}
+
+
+// apply
+inline fun <T> T.apply(block: T.() -> Unit): T {
+    block()
+    return this
+}
+
+
+// also
+inline fun <T> T.also(block: (T) -> Unit): T {
+    block(this)
+    return this
+}
+
+// run
+inline fun <T, R> T.run(block: T.() -> R): R {
+    return block()
+}
+
+
+// run (another way)
+inline fun <R> run(block: () -> R): R {
+    return block()
+}
+
+
+//
