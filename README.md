@@ -38,3 +38,14 @@
 
 
 
+
+
+
+## References
+
+- Inspired by a wonderful talk by Huyen Tue Dao at KotlinConf 2018 - Dissecting the stdlib
+    - 🔗 [Video](https://youtu.be/Fzt_9I733Yg)
+    - 🔗 [Slide](https://github.com/queencodemonkey/dissecting-the-stdlib)
+- 🔗 [KotlinConf 2017 - Two Stones, One Bird: Implementation Tradeoffs by Christina Lee](https://youtu.be/YxOTU9F_YX4)
+- 🔗 [Higher-Order Functions and Lambdas](https://kotlinlang.org/docs/reference/lambdas.html)
+- 🔗 [google/iossched](https://github.com/google/iosched)

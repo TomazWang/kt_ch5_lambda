@@ -54,7 +54,18 @@ class AlsoApplyTest {
         
         val tv = TextView().apply { setText("123") }
         // val tvIRL = findViewById(R.id.tv_irl).apply { setText("123") }
+        
     }
+
+//    another exapmle from google/iosched:
+
+//    fun newInstance(featureId: String): MapFragment {
+//        return MapFragment().apply {
+//            arguments = Bundle().apply {
+//                putString(ARG_FEATURE_ID, featureId)
+//            }
+//        }
+//    }
     
     
     /**
@@ -66,7 +77,10 @@ class AlsoApplyTest {
         
         Builder()
             .setText("!23")
-            .also { println(it) /** insert some log **/ }
+            .also {
+                println(it)
+                /** insert some log **/
+            }
             .setColor(123)
             .build()
     }

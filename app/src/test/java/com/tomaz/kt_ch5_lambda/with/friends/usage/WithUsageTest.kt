@@ -57,6 +57,33 @@ class WithUsageTest {
     }
     
     
+    @Test
+    fun `use with for each loop`() {
+        val packages = listOf(
+            Package(OpenedMessage("RED"), "Alex"),
+            Package(SealedMessage("BLUE"), "Brain"),
+            Package(DirectedDelivery("RED"), "Alex", "Frank"),
+            Package(SealedMessage("BLACK"), "Chris"),
+            Package(SealedMessage("BLACK"), "Daniel")
+        )
+        
+        
+        for (letter in packages) with(letter) {
+            when (message) {
+                is OpenedMessage -> println("$from send a letter out: $message")
+                is SealedMessage -> println("$from send a letter out: ******")
+                is DirectedDelivery -> println("$from send a letter to $to")
+            }
+        }
+        
+    }
+    
+    
+    // example from Kotlin/kotlinx.coroutines
+    //
+    // 🔗 https://github.com/Kotlin/kotlinx.coroutines/blob/d6a5a399d1724ff56bbb285b25df071dbc98b715/benchmarks/src/jmh/kotlin/benchmarks/actors/CycledActorsBenchmark.kt
+    
+    
 }
 
 
@@ -68,7 +95,7 @@ class MockDb {
 }
 
 
-class SharedPreference{
+class SharedPreference {
     fun edit(): SharedPreferenceEditor = SharedPreferenceEditor()
 }
 
@@ -77,6 +104,16 @@ class SharedPreferenceEditor {
     fun putBoolean(key: String, b: Boolean) {}
     fun putString(key: String, s: String) {}
 }
+
+
+data class Package(val message: Message, val from: String, val to: String? = null)
+
+
+sealed class Message(val words: String)
+
+class OpenedMessage(words: String) : Message(words)
+class SealedMessage(words: String) : Message(words)
+class DirectedDelivery(words: String) : Message(words)
 
 
 // +-- 💡 重點整理 --------------------------------------------------------------------------------
