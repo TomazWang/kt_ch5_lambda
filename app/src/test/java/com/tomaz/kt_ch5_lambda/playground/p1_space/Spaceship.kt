@@ -6,6 +6,10 @@ package com.tomaz.kt_ch5_lambda.playground.p1_space
  *
  * @author Tomaz Wang
  * @since 2019/03/29
+ *
+ *
+ * Please refer to SpaceshipLoadingTest.kt
+ *
  **/
 
 class Spaceship(val name: String, val spaceCapacity: Int, val weightCapacity: Int) {
