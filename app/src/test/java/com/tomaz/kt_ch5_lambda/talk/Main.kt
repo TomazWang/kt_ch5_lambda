@@ -312,7 +312,7 @@ fun simplifyLambdas() {
 // +-- 💡 重點整理 --------------------------------------------------------------------------------
 // |
 // |    Standard library 中有很多好用的 function 利用了 lambda 的特性
-// |
+// |`
 // |    - forEach
 // |    - map
 // |    - filter
@@ -375,6 +375,14 @@ public inline fun <T> Iterable<T>.filter(predicate: (T) -> Boolean): List<T> {
  */
 
 val oddNumbers = numbers.filter { it % 2 != 0 }
+
+
+
+
+// TODO: reduce
+val sumWithReduce = numbers.reduce { acc, it -> acc + it} // sum = 15
+val sumWithSum = numbers.sum()
+
 
 
 //
@@ -593,6 +601,9 @@ inline fun <R> run(block: () -> R): R {
     return block()
 }
 
+// 📄 WithFriends.kt
+
+
 
 //
 //
@@ -615,6 +626,50 @@ inline fun <R> run(block: () -> R): R {
 //
 //
 //
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//
+//
+// ============================================================================================================
+//
+//
+
+// +-- 💡 重點回顧 --------------------------------------------------------------------------------
+// |
+// |    - lambda 基本上是簡短的 function
+// |    - 最後一個參數是 lambda 的話，可以提出來
+// |    - 可以用 :: 來指定 function (function, lambda 可以被傳遞 )
+// |    - 回顧 collection function 的用法 (map, filter, reduce)
+// |    - 回顧 sequence 的使用時機
+// |    - 回顧 with, apply, also, let (run) 的用法
+// |
+// +----------------------------------------------------------------------------------------------
+
+// TODO: DSL
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

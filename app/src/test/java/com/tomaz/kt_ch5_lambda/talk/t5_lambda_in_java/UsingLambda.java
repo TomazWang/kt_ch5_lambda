@@ -25,6 +25,7 @@ public class UsingLambda {
         btn.onClick(new Function1<Button, Unit>() {
             @Override
             public Unit invoke(Button button) {
+                // do something
                 return Unit.INSTANCE;
             }
         });
@@ -36,6 +37,7 @@ public class UsingLambda {
         //
         // 因為 Function1 也是 SAM, 可以改用 java 8 lambda 寫法
         btn.onClick(button -> {
+            // do something
             return Unit.INSTANCE; // 可惜的是在 java 中要直接使用一個 return Unit 的 lambda 必須要有回傳值
         });
 
